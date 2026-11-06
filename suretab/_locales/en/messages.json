@@ -1,0 +1,247 @@
+{
+  "extName": {
+    "message": "SureTab – Save Tabs, Never Lose Them"
+  },
+  "extDesc": {
+    "message": "Save all tabs in one click and never lose them. Automatic bookmark backup, trash, snapshots. Imports from OneTab & Toby."
+  },
+  "cmdSaveWindow": {
+    "message": "Save all tabs in this window"
+  },
+  "ctxSaveTab": {
+    "message": "Save this tab"
+  },
+  "ctxSaveWindow": {
+    "message": "Save all tabs in this window"
+  },
+  "ctxSaveAll": {
+    "message": "Save tabs from all windows"
+  },
+  "ctxOpen": {
+    "message": "Open my saved tabs"
+  },
+  "saveWindow": {
+    "message": "Save all tabs in this window"
+  },
+  "saveAll": {
+    "message": "Save tabs from all windows"
+  },
+  "saveTab": {
+    "message": "Save only this tab"
+  },
+  "openList": {
+    "message": "Open my saved tabs"
+  },
+  "totalSaved": {
+    "message": "$ARG1$ tabs saved in total",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "nothingToSave": {
+    "message": "Nothing to save here."
+  },
+  "savedCount": {
+    "message": "Saved $ARG1$ tabs ✓",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "summary": {
+    "message": "$ARG1$ tabs in $ARG2$ groups",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "searchPlaceholder": {
+    "message": "Search saved tabs…"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "export": {
+    "message": "Export"
+  },
+  "trash": {
+    "message": "Trash"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "recoverTitle": {
+    "message": "We found a backup of your tabs"
+  },
+  "recoverBody": {
+    "message": "Your list is empty, but the bookmark backup has $ARG1$ tabs in $ARG2$ groups. Restore them?",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "recoverButton": {
+    "message": "Restore my tabs"
+  },
+  "recovered": {
+    "message": "Tabs restored ✓"
+  },
+  "emptyTitle": {
+    "message": "No saved tabs yet"
+  },
+  "emptyBody": {
+    "message": "Click the SureTab icon and choose “Save all tabs in this window”. Coming from OneTab or Toby? Use Import."
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "importTitle": {
+    "message": "Import tabs"
+  },
+  "importHelp": {
+    "message": "Paste your OneTab export (“Export URLs”), a Toby JSON export, a SureTab backup, or a plain list of links. Nothing is replaced: imported tabs are added."
+  },
+  "importFile": {
+    "message": "…or choose a file:"
+  },
+  "importButton": {
+    "message": "Import"
+  },
+  "importNone": {
+    "message": "No links found. Check the format and try again."
+  },
+  "importDone": {
+    "message": "Imported $ARG1$ tabs in $ARG2$ groups ✓",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "exportHelp": {
+    "message": "Download a full backup file, or copy everything as text in OneTab's format."
+  },
+  "exportJson": {
+    "message": "Download backup (.json)"
+  },
+  "exportText": {
+    "message": "Copy as text"
+  },
+  "copied": {
+    "message": "Copied to clipboard ✓"
+  },
+  "trashHelp": {
+    "message": "Deleted groups and links stay here for 30 days."
+  },
+  "trashEmpty": {
+    "message": "The trash is empty."
+  },
+  "emptyTrash": {
+    "message": "Empty trash"
+  },
+  "confirmEmptyTrash": {
+    "message": "Delete everything in the trash forever?"
+  },
+  "deletedOn": {
+    "message": "deleted $ARG1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "restore": {
+    "message": "Restore"
+  },
+  "optCloseAfterSave": {
+    "message": "Close tabs after saving them"
+  },
+  "optSkipPinned": {
+    "message": "Don't save pinned tabs"
+  },
+  "optRestoreUnloaded": {
+    "message": "Restore tabs without loading them (saves memory)"
+  },
+  "optRemoveOnRestore": {
+    "message": "Remove tabs from the list when you open them"
+  },
+  "optBookmarkBackup": {
+    "message": "Automatic backup in bookmarks"
+  },
+  "bookmarkBackupHelp": {
+    "message": "SureTab keeps a copy of all your groups in the “SureTab backup” bookmarks folder. It survives browser updates and syncs with your Google account."
+  },
+  "snapshotsTitle": {
+    "message": "Automatic snapshots"
+  },
+  "snapshotsHelp": {
+    "message": "SureTab saves a snapshot of your list at most once an hour (last 5). Use one to go back in time."
+  },
+  "noSnapshots": {
+    "message": "No snapshots yet."
+  },
+  "snapshotRestore": {
+    "message": "Restore"
+  },
+  "confirmRestoreSnapshot": {
+    "message": "Replace your current list with this snapshot? (Your current list is kept as a new snapshot.)"
+  },
+  "restoreAll": {
+    "message": "Restore all"
+  },
+  "restoreNewWindow": {
+    "message": "In new window"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "star": {
+    "message": "Pin to top"
+  },
+  "unstar": {
+    "message": "Unpin"
+  },
+  "untitled": {
+    "message": "Untitled group"
+  },
+  "tabsCount": {
+    "message": "$ARG1$ tabs",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "removeLink": {
+    "message": "Remove"
+  },
+  "linkRemoved": {
+    "message": "Link moved to trash"
+  },
+  "groupDeleted": {
+    "message": "Group moved to trash"
+  },
+  "groupRestored": {
+    "message": "Group opened and moved to trash"
+  }
+}

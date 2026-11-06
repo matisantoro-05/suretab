@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>SureTab</title>
+  <link rel="icon" href="icons/icon32.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <img src="icons/icon48.png" width="28" height="28" alt="">
+      <div>
+        <strong data-i18n="extName"></strong>
+        <div class="muted small" id="summary"></div>
+      </div>
+    </div>
+    <input type="search" id="search" data-i18n-ph="searchPlaceholder">
+    <nav class="actions">
+      <button class="btn" id="btn-import" data-i18n="import"></button>
+      <button class="btn" id="btn-export" data-i18n="export"></button>
+      <button class="btn" id="btn-trash" data-i18n="trash"></button>
+      <button class="btn" id="btn-settings" data-i18n="settings"></button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="banner" id="recover" hidden>
+      <div>
+        <strong data-i18n="recoverTitle"></strong>
+        <p id="recover-body"></p>
+      </div>
+      <button class="btn primary" id="btn-recover" data-i18n="recoverButton"></button>
+    </section>
+
+    <section class="empty" id="empty" hidden>
+      <h2 data-i18n="emptyTitle"></h2>
+      <p data-i18n="emptyBody"></p>
+    </section>
+
+    <div id="groups"></div>
+  </main>
+
+  <div class="toast" id="toast" role="status" hidden>
+    <span id="toast-text"></span>
+    <button class="link" id="toast-undo" data-i18n="undo"></button>
+  </div>
+
+  <!-- Import -->
+  <dialog id="dlg-import">
+    <h2 data-i18n="importTitle"></h2>
+    <p class="muted" data-i18n="importHelp"></p>
+    <textarea id="import-text" rows="10" spellcheck="false"></textarea>
+    <label class="file"><span data-i18n="importFile"></span> <input type="file" id="import-file" accept=".json,.txt,.csv,text/plain,application/json"></label>
+    <p class="status" id="import-status"></p>
+    <div class="row end">
+      <button class="btn" data-close data-i18n="cancel"></button>
+      <button class="btn primary" id="btn-do-import" data-i18n="importButton"></button>
+    </div>
+  </dialog>
+
+  <!-- Export -->
+  <dialog id="dlg-export">
+    <h2 data-i18n="export"></h2>
+    <p class="muted" data-i18n="exportHelp"></p>
+    <div class="row">
+      <button class="btn primary" id="btn-export-json" data-i18n="exportJson"></button>
+      <button class="btn" id="btn-export-text" data-i18n="exportText"></button>
+    </div>
+    <div class="row end">
+      <button class="btn" data-close data-i18n="close"></button>
+    </div>
+  </dialog>
+
+  <!-- Trash -->
+  <dialog id="dlg-trash">
+    <h2 data-i18n="trash"></h2>
+    <p class="muted" data-i18n="trashHelp"></p>
+    <ul class="plain" id="trash-list"></ul>
+    <div class="row end">
+      <button class="btn danger" id="btn-empty-trash" data-i18n="emptyTrash"></button>
+      <button class="btn" data-close data-i18n="close"></button>
+    </div>
+  </dialog>
+
+  <!-- Settings -->
+  <dialog id="dlg-settings">
+    <h2 data-i18n="settings"></h2>
+    <label class="check"><input type="checkbox" data-setting="closeAfterSave"> <span data-i18n="optCloseAfterSave"></span></label>
+    <label class="check"><input type="checkbox" data-setting="skipPinned"> <span data-i18n="optSkipPinned"></span></label>
+    <label class="check"><input type="checkbox" data-setting="restoreUnloaded"> <span data-i18n="optRestoreUnloaded"></span></label>
+    <label class="check"><input type="checkbox" data-setting="removeOnRestore"> <span data-i18n="optRemoveOnRestore"></span></label>
+    <label class="check"><input type="checkbox" data-setting="bookmarkBackup"> <span data-i18n="optBookmarkBackup"></span></label>
+    <p class="muted small" data-i18n="bookmarkBackupHelp"></p>
+    <h3 data-i18n="snapshotsTitle"></h3>
+    <p class="muted small" data-i18n="snapshotsHelp"></p>
+    <ul class="plain" id="snap-list"></ul>
+    <div class="row end">
+      <button class="btn" data-close data-i18n="close"></button>
+    </div>
+  </dialog>
+
+  <template id="tpl-group">
+    <article class="group">
+      <header class="group-head">
+        <button class="star" data-act="star"></button>
+        <input class="group-title" data-act="rename" maxlength="120">
+        <span class="muted small meta"></span>
+        <div class="group-actions">
+          <button class="btn small" data-act="restore" data-i18n="restoreAll"></button>
+          <button class="btn small" data-act="restore-window" data-i18n="restoreNewWindow"></button>
+          <button class="btn small ghost" data-act="delete" data-i18n="delete"></button>
+        </div>
+      </header>
+      <ul class="links"></ul>
+    </article>
+  </template>
+
+  <script type="module" src="manager.js"></script>
+</body>
+</html>
