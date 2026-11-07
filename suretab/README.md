@@ -25,6 +25,7 @@ The backup is never overwritten with an empty list, and a new backup is fully wr
 - **Export** a full JSON backup or copy everything as text (OneTab format)
 - English and Spanish UI, light and dark mode
 - 100% local: no account, no servers, no analytics
+- **SureTab Pro** (one-time purchase): automatic backup to the user's own Google Drive (`drive.file` scope), daily copies for 30 days, restore on any computer. Licenses via the Lemon Squeezy License API — no backend
 
 ## Project structure
 
@@ -38,6 +39,9 @@ lib/store.js       data layer (storage, trash, snapshots)
 lib/bookmarks.js   bookmark backup + recovery
 lib/parse.js       importers (OneTab, Toby, JSON, URL lists)
 lib/i18n.js        helpers
+lib/license.js     SureTab Pro license (Lemon Squeezy)
+lib/drive.js       SureTab Pro Google Drive backup
+lib/config.js      store/product IDs, checkout link, Google client ID
 _locales/          en, es
 ```
 

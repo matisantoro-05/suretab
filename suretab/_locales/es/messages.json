@@ -267,6 +267,123 @@
   "reviewNo": {
     "message": "No, gracias"
   },
+  "proPitch": {
+    "message": "Tus pestañas quedan a salvo aunque le pase algo a tu computadora."
+  },
+  "perkDrive": {
+    "message": "Backup automático en tu propio Google Drive"
+  },
+  "perkVersions": {
+    "message": "Una copia por día, guardada 30 días"
+  },
+  "perkMove": {
+    "message": "Llevá tus pestañas a otra computadora"
+  },
+  "perkOnce": {
+    "message": "Un solo pago, tuyo para siempre. Sin suscripción."
+  },
+  "buyPro": {
+    "message": "Comprar Pro – $ARG1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "haveKey": {
+    "message": "¿Ya lo compraste?"
+  },
+  "licensePlaceholder": {
+    "message": "Pegá tu clave de licencia"
+  },
+  "activate": {
+    "message": "Activar"
+  },
+  "working": {
+    "message": "Un momento…"
+  },
+  "licenseInvalid": {
+    "message": "Esa clave no es válida. Revisá que la hayas copiado completa."
+  },
+  "licenseLimit": {
+    "message": "Esta clave ya está activa en 3 computadoras. Primero desactivala en alguna de ellas."
+  },
+  "licenseWrong": {
+    "message": "Esa clave es de otro producto."
+  },
+  "licenseNetwork": {
+    "message": "No se pudo conectar. Revisá tu conexión a internet y probá de nuevo."
+  },
+  "permDenied": {
+    "message": "SureTab necesita ese permiso para continuar."
+  },
+  "proActive": {
+    "message": "✓ SureTab Pro está activo en esta computadora. ¡Gracias!"
+  },
+  "proActivated": {
+    "message": "SureTab Pro activado ✓"
+  },
+  "proRevoked": {
+    "message": "Tu licencia ya no es válida (por ejemplo, después de un reembolso)."
+  },
+  "confirmDeactivate": {
+    "message": "¿Desactivar SureTab Pro en esta computadora? Podés volver a activarlo con tu clave."
+  },
+  "deactivatePro": {
+    "message": "Desactivar Pro en esta computadora"
+  },
+  "driveTitle": {
+    "message": "Backup en Google Drive"
+  },
+  "driveUnavailable": {
+    "message": "El backup en Google Drive va a estar disponible muy pronto."
+  },
+  "driveNotConnected": {
+    "message": "Sin conectar. El backup se guarda en una carpeta “SureTab” de tu Drive; SureTab no puede ver tus otros archivos."
+  },
+  "driveNever": {
+    "message": "Conectado · todavía sin backup"
+  },
+  "driveLast": {
+    "message": "Conectado · último backup: $ARG1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "driveReconnect": {
+    "message": "Google necesita que inicies sesión de nuevo. Tocá “Conectar Google Drive”."
+  },
+  "driveCancelled": {
+    "message": "Se canceló el inicio de sesión de Google."
+  },
+  "driveError": {
+    "message": "El último backup falló ($ARG1$). SureTab va a volver a intentarlo.",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "driveConnect": {
+    "message": "Conectar Google Drive"
+  },
+  "driveNow": {
+    "message": "Hacer backup ahora"
+  },
+  "driveRestore": {
+    "message": "Recuperar desde Drive"
+  },
+  "driveDisconnect": {
+    "message": "Desconectar"
+  },
+  "driveBackedUp": {
+    "message": "Backup guardado en Google Drive ✓"
+  },
+  "driveNoBackups": {
+    "message": "Todavía no hay backups en tu Drive."
+  },
   "groupRestored": {
     "message": "Grupo abierto y enviado a la papelera"
   }

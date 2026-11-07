@@ -21,6 +21,7 @@
       <button class="btn" id="btn-export" data-i18n="export"></button>
       <button class="btn" id="btn-trash" data-i18n="trash"></button>
       <button class="btn" id="btn-settings" data-i18n="settings"></button>
+      <button class="btn pro" id="btn-pro">⭐ Pro</button>
     </nav>
   </header>
 
@@ -91,6 +92,43 @@
     <div class="row end">
       <button class="btn danger" id="btn-empty-trash" data-i18n="emptyTrash"></button>
       <button class="btn" data-close data-i18n="close"></button>
+    </div>
+  </dialog>
+
+  <!-- SureTab Pro -->
+  <dialog id="dlg-pro">
+    <h2>⭐ SureTab Pro</h2>
+    <section id="pro-locked">
+      <p data-i18n="proPitch"></p>
+      <ul class="perks">
+        <li data-i18n="perkDrive"></li>
+        <li data-i18n="perkVersions"></li>
+        <li data-i18n="perkMove"></li>
+        <li data-i18n="perkOnce"></li>
+      </ul>
+      <button class="btn primary" id="btn-buy"></button>
+      <h3 data-i18n="haveKey"></h3>
+      <div class="row tight">
+        <input type="text" id="license-input" class="text" data-i18n-ph="licensePlaceholder" spellcheck="false" autocomplete="off">
+        <button class="btn" id="btn-activate" data-i18n="activate"></button>
+      </div>
+    </section>
+    <section id="pro-active" hidden>
+      <p id="pro-state"></p>
+      <h3 data-i18n="driveTitle"></h3>
+      <p class="muted" id="drive-status"></p>
+      <div class="row tight" id="drive-actions">
+        <button class="btn primary" id="btn-drive-connect" data-i18n="driveConnect"></button>
+        <button class="btn" id="btn-drive-now" data-i18n="driveNow"></button>
+        <button class="btn" id="btn-drive-restore" data-i18n="driveRestore"></button>
+        <button class="btn ghost" id="btn-drive-disconnect" data-i18n="driveDisconnect"></button>
+      </div>
+      <ul class="plain" id="drive-list" hidden></ul>
+      <p class="small"><button class="link muted" id="btn-deactivate" data-i18n="deactivatePro"></button></p>
+    </section>
+    <p class="status" id="pro-msg" role="status"></p>
+    <div class="row end">
+      <button class="btn" autofocus data-close data-i18n="close"></button>
     </div>
   </dialog>
 

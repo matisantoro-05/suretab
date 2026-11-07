@@ -3,6 +3,9 @@ import { parseImport } from './lib/parse.js';
 import { readBackup } from './lib/bookmarks.js';
 import { t, tabs as nTabs, groups as nGroups, applyI18n, favicon, formatDate } from './lib/i18n.js';
 import { getMeta, setMeta, bump, shouldAskReview } from './lib/meta.js';
+import { CHECKOUT_URL, PRO_PRICE } from './lib/config.js';
+import * as license from './lib/license.js';
+import * as drive from './lib/drive.js';
 
 applyI18n();
 
@@ -299,6 +302,184 @@ async function checkReview() {
     $('review').hidden = true;
   };
 }
+
+// ---------- SureTab Pro ----------
+const LICENSE_ERRORS = {
+  invalid: 'licenseInvalid',
+  limit: 'licenseLimit',
+  'wrong-product': 'licenseWrong',
+  network: 'licenseNetwork'
+};
+const DRIVE_ERRORS = {
+  'auth-needed': 'driveReconnect',
+  'auth-cancelled': 'driveCancelled',
+  'auth-failed': 'driveCancelled',
+  network: 'licenseNetwork'
+};
+const proMsg = (text) => ($('pro-msg').textContent = text || '');
+
+async function busy(button, fn) {
+  const all = document.querySelectorAll('#dlg-pro button');
+  all.forEach((b) => (b.disabled = true));
+  proMsg(t('working'));
+  try {
+    await fn();
+  } finally {
+    all.forEach((b) => (b.disabled = false));
+    if ($('pro-msg').textContent === t('working')) proMsg('');
+  }
+}
+
+async function renderPro() {
+  const [p, d] = await Promise.all([license.getPro(), drive.getDrive()]);
+  const active = license.isProActive(p);
+  $('pro-locked').hidden = active;
+  $('pro-active').hidden = !active && p.status !== 'revoked';
+  $('btn-buy').textContent = t('buyPro', PRO_PRICE);
+  if (p.status === 'revoked') {
+    $('pro-locked').hidden = false;
+    $('pro-active').hidden = true;
+    proMsg(t('proRevoked'));
+    return;
+  }
+  if (!active) return;
+  $('pro-state').textContent = t('proActive');
+
+  const configured = drive.driveConfigured();
+  let status;
+  if (!configured) status = t('driveUnavailable');
+  else if (!d.connected) status = t('driveNotConnected');
+  else if (d.needsAuth) status = t('driveReconnect');
+  else if (d.lastError) status = t('driveError', d.lastError);
+  else if (d.lastBackupAt) status = t('driveLast', formatDate(d.lastBackupAt));
+  else status = t('driveNever');
+  $('drive-status').textContent = status;
+  $('drive-actions').hidden = !configured;
+  $('btn-drive-connect').hidden = d.connected && !d.needsAuth;
+  $('btn-drive-now').hidden = !d.connected || d.needsAuth;
+  $('btn-drive-restore').hidden = false;
+  $('btn-drive-disconnect').hidden = !d.connected;
+}
+
+$('btn-pro').onclick = async () => {
+  proMsg('');
+  $('drive-list').hidden = true;
+  await renderPro();
+  $('dlg-pro').showModal();
+  // Re-check the license if the last check is older than an hour.
+  const p = await license.getPro();
+  if (p.licenseKey && Date.now() - (p.validatedAt || 0) > 60 * 60 * 1000 &&
+      (await chrome.permissions.contains({ origins: [license.LS_ORIGIN] }))) {
+    await license.validate();
+    await renderPro();
+  }
+};
+
+$('btn-buy').onclick = () => chrome.tabs.create({ url: CHECKOUT_URL });
+
+$('btn-activate').onclick = () =>
+  busy($('btn-activate'), async () => {
+    // Ask for the network permission only now, inside the click.
+    const granted = await chrome.permissions.request({ origins: [license.LS_ORIGIN] });
+    if (!granted) return proMsg(t('permDenied'));
+    try {
+      await license.activate($('license-input').value);
+      $('license-input').value = '';
+      proMsg('');
+      await renderPro();
+      toast(t('proActivated'));
+    } catch (e) {
+      proMsg(t(LICENSE_ERRORS[e.code] || 'licenseInvalid'));
+    }
+  });
+
+$('btn-deactivate').onclick = async () => {
+  if (!confirm(t('confirmDeactivate'))) return;
+  await busy($('btn-deactivate'), async () => {
+    await license.deactivate();
+    await drive.disconnect();
+    proMsg('');
+    await renderPro();
+  });
+};
+
+async function connectDrive() {
+  const granted = await chrome.permissions.request({ permissions: ['identity'], origins: [drive.GOOGLE_ORIGIN] });
+  if (!granted) throw Object.assign(new Error('perm'), { code: 'perm' });
+}
+
+function driveFailure(e) {
+  if (e.code === 'perm') return proMsg(t('permDenied'));
+  proMsg(t(DRIVE_ERRORS[e.code] || 'driveError', e.message));
+}
+
+$('btn-drive-connect').onclick = () =>
+  busy($('btn-drive-connect'), async () => {
+    try {
+      await connectDrive();
+      await drive.backupNow(store.exportData(data), { interactive: true });
+      proMsg('');
+      toast(t('driveBackedUp'));
+    } catch (e) {
+      driveFailure(e);
+    }
+    await renderPro();
+  });
+
+$('btn-drive-now').onclick = () =>
+  busy($('btn-drive-now'), async () => {
+    try {
+      await drive.backupNow(store.exportData(data), { interactive: true });
+      proMsg('');
+      toast(t('driveBackedUp'));
+    } catch (e) {
+      await drive.setDrive({ lastError: e.code, needsAuth: e.code === 'auth-needed' });
+      driveFailure(e);
+    }
+    await renderPro();
+  });
+
+$('btn-drive-disconnect').onclick = async () => {
+  await drive.disconnect();
+  proMsg('');
+  await renderPro();
+};
+
+$('btn-drive-restore').onclick = () =>
+  busy($('btn-drive-restore'), async () => {
+    const ul = $('drive-list');
+    ul.textContent = '';
+    try {
+      await connectDrive();
+      const files = await drive.listBackups();
+      proMsg(files.length ? '' : t('driveNoBackups'));
+      for (const f of files) {
+        const li = document.createElement('li');
+        const span = document.createElement('span');
+        span.textContent = `${f.name} — ${formatDate(Date.parse(f.modifiedTime))}`;
+        const btn = document.createElement('button');
+        btn.className = 'btn small';
+        btn.textContent = t('restore');
+        btn.onclick = () =>
+          busy(btn, async () => {
+            try {
+              const json = await drive.downloadBackup(f.id);
+              const groups = parseImport(JSON.stringify(json));
+              const res = await store.importGroups(groups);
+              proMsg('');
+              toast(t('importDone', nTabs(res.tabs), nGroups(res.groups)));
+            } catch (e) {
+              driveFailure(e);
+            }
+          });
+        li.append(span, btn);
+        ul.append(li);
+      }
+      ul.hidden = !files.length;
+    } catch (e) {
+      driveFailure(e);
+    }
+  });
 
 // ---------- live updates ----------
 chrome.storage.onChanged.addListener(async (changes, area) => {

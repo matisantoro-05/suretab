@@ -13,7 +13,8 @@ const bm = new Map(); // id -> {id, parentId, title, url, dateAdded}
 globalThis.chrome = {
   storage: { local: {
     async get(k) { return k in mem ? { [k]: structuredClone(mem[k]) } : {}; },
-    async set(o) { for (const [k, v] of Object.entries(o)) mem[k] = structuredClone(v); }
+    async set(o) { for (const [k, v] of Object.entries(o)) mem[k] = structuredClone(v); },
+    async remove(k) { for (const key of [].concat(k)) delete mem[key]; }
   } },
   bookmarks: {
     async search({ title }) { return [...bm.values()].filter((b) => b.title === title); },
@@ -161,3 +162,128 @@ assert.equal(shouldAskReview({ installedAt: now - 3 * 864e5, saves: 3 }, now), t
 assert.equal(shouldAskReview({ installedAt: now, recoveries: 1 }, now), true, 'after a recovery');
 assert.equal(shouldAskReview({ installedAt: now - 9e9, saves: 9, reviewPrompt: 'dismissed' }, now), false, 'never twice');
 console.log('Review prompt tests passed ✓');
+
+// ---- SureTab Pro: license ----
+const license = await imp('lib/license.js');
+const calls = [];
+let lsReply = {};
+globalThis.fetch = async (url, opts = {}) => {
+  calls.push({ url: String(url), opts });
+  const r = typeof lsReply === 'function' ? lsReply(String(url), opts) : lsReply;
+  if (r === 'offline') throw new TypeError('Failed to fetch');
+  return { ok: (r.status || 200) < 400, status: r.status || 200, json: async () => r.body, text: async () => JSON.stringify(r.body) };
+};
+const good = { activated: true, error: null, instance: { id: 'inst-1' }, license_key: { status: 'active' }, meta: { store_id: 517981, product_id: 1508709 } };
+
+lsReply = { body: good };
+let p = await license.activate('  KEY-1  ');
+assert.equal(license.isProActive(p), true);
+assert.equal(p.licenseKey, 'KEY-1');
+assert.match(calls.at(-1).url, /licenses\/activate$/);
+assert.equal(new URLSearchParams(calls.at(-1).opts.body).get('license_key'), 'KEY-1');
+
+// wrong product -> rejected and activation released
+await license.deactivate();
+lsReply = (url) => (url.endsWith('activate') && !url.endsWith('deactivate') ? { body: { ...good, meta: { store_id: 1, product_id: 2 } } } : { body: { deactivated: true } });
+await assert.rejects(license.activate('OTHER'), (e) => e.code === 'wrong-product');
+assert.match(calls.at(-1).url, /deactivate$/);
+assert.equal(license.isProActive(await license.getPro()), false);
+
+// invalid / limit / offline
+lsReply = { status: 404, body: { activated: false, error: 'license_key not found.' } };
+await assert.rejects(license.activate('NOPE'), (e) => e.code === 'invalid');
+lsReply = { status: 400, body: { activated: false, error: 'This license key has reached the activation limit.' } };
+await assert.rejects(license.activate('FULL'), (e) => e.code === 'limit');
+lsReply = 'offline';
+await assert.rejects(license.activate('X'), (e) => e.code === 'network');
+
+// validate: offline keeps Pro, refund (disabled) revokes it
+lsReply = { body: good };
+await license.activate('KEY-1');
+lsReply = 'offline';
+assert.equal(license.isProActive(await license.validate()), true, 'offline keeps Pro');
+lsReply = { status: 503, body: {} };
+assert.equal(license.isProActive(await license.validate()), true, 'server error keeps Pro');
+lsReply = { body: { valid: true, license_key: { status: 'active' }, meta: good.meta } };
+assert.equal(license.isProActive(await license.validate()), true);
+lsReply = { status: 400, body: { valid: false, license_key: { status: 'disabled' }, meta: good.meta } };
+p = await license.validate();
+assert.equal(p.status, 'revoked');
+console.log('License tests passed ✓');
+
+// ---- SureTab Pro: Google Drive ----
+const drive = await imp('lib/drive.js');
+const files = new Map(); // id -> {id,name,parents,mimeType,content,modifiedTime}
+let nextId = 1;
+let tokenFlowCalls = 0;
+globalThis.chrome.identity = {
+  getRedirectURL: () => 'https://abc.chromiumapp.org/',
+  launchWebAuthFlow: async ({ url, interactive }) => {
+    tokenFlowCalls++;
+    assert.match(url, /drive\.file/);
+    return `https://abc.chromiumapp.org/#access_token=TOKEN${tokenFlowCalls}&expires_in=3600&token_type=Bearer`;
+  }
+};
+function driveFetch(url, opts = {}) {
+  const u = new URL(url);
+  const method = opts.method || 'GET';
+  assert.match(opts.headers.Authorization, /^Bearer TOKEN/);
+  const send = (status, body) => ({ status, body });
+  if (u.pathname === '/drive/v3/files' && method === 'GET') {
+    const qy = u.searchParams.get('q');
+    let list = [...files.values()];
+    const name = qy.match(/name='([^']+)'/);
+    if (name) list = list.filter((f) => f.name === name[1]);
+    const contains = qy.match(/name contains '([^']+)'/);
+    if (contains) list = list.filter((f) => f.name.includes(contains[1]));
+    const parent = qy.match(/'([^']+)' in parents/);
+    if (parent) list = list.filter((f) => (f.parents || []).includes(parent[1]));
+    if (/mimeType='application\/vnd.google-apps.folder'/.test(qy)) list = list.filter((f) => f.mimeType.includes('folder'));
+    return send(200, { files: list.map(({ id, name, modifiedTime }) => ({ id, name, modifiedTime })) });
+  }
+  if (u.pathname === '/drive/v3/files' && method === 'POST') {
+    const meta = JSON.parse(opts.body);
+    const id = 'f' + nextId++;
+    files.set(id, { id, ...meta, modifiedTime: new Date().toISOString() });
+    return send(200, { id });
+  }
+  if (u.pathname === '/upload/drive/v3/files' && method === 'POST') {
+    const parts = opts.body.split(/--suretab[a-z0-9]+/);
+    const meta = JSON.parse(parts[1].split('\r\n\r\n')[1]);
+    const content = parts[2].split('\r\n\r\n')[1].replace(/\r\n$/, '');
+    const id = 'f' + nextId++;
+    files.set(id, { id, ...meta, content, modifiedTime: new Date().toISOString() });
+    return send(200, { id });
+  }
+  const m = u.pathname.match(/files\/(f\d+)$/);
+  if (m && method === 'PATCH') { files.get(m[1]).content = opts.body; return send(200, { id: m[1] }); }
+  if (m && method === 'DELETE') { files.delete(m[1]); return send(204, null); }
+  if (m && method === 'GET') return send(200, JSON.parse(files.get(m[1]).content));
+  return send(404, { error: 'unknown ' + method + ' ' + u.pathname });
+}
+lsReply = (url, opts) => driveFetch(url, opts);
+
+// an old daily copy that must be pruned
+const oldDay = new Date(Date.now() - 40 * 864e5).toISOString().slice(0, 10);
+const payload = store.exportData(await store.load());
+await drive.backupNow(payload, { interactive: true });
+const folder = [...files.values()].find((f) => f.mimeType.includes('folder'));
+files.set('f999', { id: 'f999', name: `suretab-backup-${oldDay}.json`, parents: [folder.id], mimeType: 'application/json', content: '{}' });
+await drive.backupNow(payload); // second run: updates, no duplicates, prunes
+const names = [...files.values()].map((f) => f.name).sort();
+const today = new Date().toISOString().slice(0, 10);
+assert.deepEqual(names, ['SureTab', 'suretab-backup-' + today + '.json', 'suretab-backup.json']);
+assert.equal(tokenFlowCalls, 1, 'token reused while valid');
+const backups = await drive.listBackups();
+assert.equal(backups.length, 2);
+const restored = await drive.downloadBackup(backups.find((b) => b.name === 'suretab-backup.json').id);
+assert.equal(parseImport(JSON.stringify(restored)).reduce((n, g) => n + g.tabs.length, 0), payload.groups.reduce((n, g) => n + g.tabs.length, 0));
+// folder deleted in Drive -> recreated automatically
+files.clear();
+await drive.backupNow(payload);
+assert.equal([...files.values()].filter((f) => f.name === 'suretab-backup.json').length, 1);
+// expired token in background -> silent refresh
+await drive.setDrive({ tokenExp: 0 });
+await drive.backupNow(payload);
+assert.equal(tokenFlowCalls, 2);
+console.log('Drive tests passed ✓');

@@ -1,4 +1,6 @@
-import { KEY, load, addGroup, purgeOldTrash } from './lib/store.js';
+import { KEY, load, addGroup, purgeOldTrash, exportData } from './lib/store.js';
+import { getPro, isProActive, validate } from './lib/license.js';
+import { getDrive, setDrive, backupNow, driveConfigured, GOOGLE_ORIGIN } from './lib/drive.js';
 import { mirror } from './lib/bookmarks.js';
 import { getMeta, setMeta, bump } from './lib/meta.js';
 
@@ -121,9 +123,50 @@ function scheduleMirror() {
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'local' && changes[KEY]) scheduleMirror();
+  if (area === 'local' && changes[KEY]) {
+    scheduleMirror();
+    scheduleDriveBackup();
+  }
 });
+
+// ---------- SureTab Pro: Google Drive backup + weekly license check ----------
+async function driveEligible() {
+  if (!driveConfigured() || !chrome.identity) return false;
+  const [pro, drive] = await Promise.all([getPro(), getDrive()]);
+  if (!isProActive(pro) || !drive.connected) return false;
+  return chrome.permissions.contains({ origins: [GOOGLE_ORIGIN] });
+}
+
+async function scheduleDriveBackup() {
+  // Alarms survive the service worker going to sleep; re-creating it debounces.
+  if (await driveEligible()) chrome.alarms.create('drive-backup', { delayInMinutes: 1 });
+}
+
+async function runDriveBackup() {
+  if (!(await driveEligible())) return;
+  try {
+    await backupNow(exportData(await load()));
+  } catch (e) {
+    await setDrive({ lastError: e.code || e.message, needsAuth: e.code === 'auth-needed' });
+  }
+}
+
+chrome.alarms.onAlarm.addListener(async (alarm) => {
+  if (alarm.name === 'drive-backup') runDriveBackup();
+  if (alarm.name === 'license-check') {
+    const pro = await getPro();
+    if (pro.licenseKey && (await chrome.permissions.contains({ origins: ['https://api.lemonsqueezy.com/*'] }))) validate();
+  }
+});
+
+function ensureLicenseAlarm() {
+  chrome.alarms.get('license-check').then((a) => {
+    if (!a || a.periodInMinutes !== 24 * 60) chrome.alarms.create('license-check', { delayInMinutes: 60, periodInMinutes: 24 * 60 });
+  });
+}
 
 chrome.runtime.onStartup.addListener(() => {
   purgeOldTrash();
+  ensureLicenseAlarm();
 });
+chrome.runtime.onInstalled.addListener(ensureLicenseAlarm);

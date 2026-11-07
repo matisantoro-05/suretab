@@ -3,7 +3,7 @@
   "name": "__MSG_extName__",
   "short_name": "SureTab",
   "description": "__MSG_extDesc__",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "default_locale": "en",
   "minimum_chrome_version": "116",
   "icons": {
@@ -30,12 +30,22 @@
     "unlimitedStorage",
     "bookmarks",
     "contextMenus",
-    "favicon"
+    "favicon",
+    "alarms"
   ],
   "commands": {
     "save-window": {
-      "suggested_key": { "default": "Alt+Shift+S" },
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
       "description": "__MSG_cmdSaveWindow__"
     }
-  }
+  },
+  "optional_permissions": [
+    "identity"
+  ],
+  "optional_host_permissions": [
+    "https://api.lemonsqueezy.com/*",
+    "https://www.googleapis.com/*"
+  ]
 }
