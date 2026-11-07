@@ -1,6 +1,8 @@
 # SureTab – Save tabs, never lose them
 
-A Manifest V3 Chrome extension that saves your open tabs into a list (like OneTab) and is built around one promise: **your saved tabs never disappear**.
+[**➜ Install from the Chrome Web Store**](https://chromewebstore.google.com/detail/apohnmmpeoppgmldpjkedfobohofihnn?utm_source=item-share-cb)
+
+A Manifest V3 Chrome extension that saves your open tabs into a list (like OneTab)...
 
 ## Why
 
