@@ -33,7 +33,7 @@
     "message": "Abrir mis pestañas guardadas"
   },
   "totalSaved": {
-    "message": "$ARG1$ pestañas guardadas en total",
+    "message": "$ARG1$ guardadas en total",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -44,7 +44,7 @@
     "message": "No hay nada para guardar."
   },
   "savedCount": {
-    "message": "$ARG1$ pestañas guardadas ✓",
+    "message": "Guardadas: $ARG1$ ✓",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -52,7 +52,7 @@
     }
   },
   "summary": {
-    "message": "$ARG1$ pestañas en $ARG2$ grupos",
+    "message": "$ARG1$ en $ARG2$",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -81,7 +81,7 @@
     "message": "Encontramos un backup de tus pestañas"
   },
   "recoverBody": {
-    "message": "Tu lista está vacía, pero el backup en marcadores tiene $ARG1$ pestañas en $ARG2$ grupos. ¿Las recuperamos?",
+    "message": "Tu lista está vacía, pero el backup en marcadores tiene $ARG1$ en $ARG2$. ¿Las recuperamos?",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -122,7 +122,7 @@
     "message": "No encontramos links. Revisá el formato y probá de nuevo."
   },
   "importDone": {
-    "message": "Se importaron $ARG1$ pestañas en $ARG2$ grupos ✓",
+    "message": "Se importaron $ARG1$ en $ARG2$ ✓",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -232,6 +232,20 @@
       }
     }
   },
+  "tabsOne": {
+    "message": "1 pestaña"
+  },
+  "groupsCount": {
+    "message": "$ARG1$ grupos",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupsOne": {
+    "message": "1 grupo"
+  },
   "removeLink": {
     "message": "Quitar"
   },
@@ -240,6 +254,18 @@
   },
   "groupDeleted": {
     "message": "Grupo enviado a la papelera"
+  },
+  "reviewTitle": {
+    "message": "¿Te sirve SureTab?"
+  },
+  "reviewBody": {
+    "message": "Una reseña corta ayuda a que otras personas la encuentren. Lleva 30 segundos."
+  },
+  "reviewYes": {
+    "message": "Dejar una reseña"
+  },
+  "reviewNo": {
+    "message": "No, gracias"
   },
   "groupRestored": {
     "message": "Grupo abierto y enviado a la papelera"

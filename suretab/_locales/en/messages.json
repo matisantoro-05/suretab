@@ -33,7 +33,7 @@
     "message": "Open my saved tabs"
   },
   "totalSaved": {
-    "message": "$ARG1$ tabs saved in total",
+    "message": "$ARG1$ saved in total",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -44,7 +44,7 @@
     "message": "Nothing to save here."
   },
   "savedCount": {
-    "message": "Saved $ARG1$ tabs ✓",
+    "message": "Saved $ARG1$ ✓",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -52,7 +52,7 @@
     }
   },
   "summary": {
-    "message": "$ARG1$ tabs in $ARG2$ groups",
+    "message": "$ARG1$ in $ARG2$",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -81,7 +81,7 @@
     "message": "We found a backup of your tabs"
   },
   "recoverBody": {
-    "message": "Your list is empty, but the bookmark backup has $ARG1$ tabs in $ARG2$ groups. Restore them?",
+    "message": "Your list is empty, but the bookmark backup has $ARG1$ in $ARG2$. Restore them?",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -122,7 +122,7 @@
     "message": "No links found. Check the format and try again."
   },
   "importDone": {
-    "message": "Imported $ARG1$ tabs in $ARG2$ groups ✓",
+    "message": "Imported $ARG1$ in $ARG2$ ✓",
     "placeholders": {
       "arg1": {
         "content": "$1"
@@ -232,6 +232,20 @@
       }
     }
   },
+  "tabsOne": {
+    "message": "1 tab"
+  },
+  "groupsCount": {
+    "message": "$ARG1$ groups",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupsOne": {
+    "message": "1 group"
+  },
   "removeLink": {
     "message": "Remove"
   },
@@ -240,6 +254,18 @@
   },
   "groupDeleted": {
     "message": "Group moved to trash"
+  },
+  "reviewTitle": {
+    "message": "Is SureTab useful to you?"
+  },
+  "reviewBody": {
+    "message": "A short review helps other people find it. It takes 30 seconds."
+  },
+  "reviewYes": {
+    "message": "Leave a review"
+  },
+  "reviewNo": {
+    "message": "No, thanks"
   },
   "groupRestored": {
     "message": "Group opened and moved to trash"

@@ -1,5 +1,5 @@
 import { load } from './lib/store.js';
-import { t, applyI18n } from './lib/i18n.js';
+import { t, tabs as nTabs, applyI18n } from './lib/i18n.js';
 
 applyI18n();
 
@@ -8,7 +8,7 @@ const [active] = await chrome.tabs.query({ active: true, currentWindow: true });
 
 const data = await load();
 const total = data.groups.reduce((n, g) => n + g.tabs.length, 0);
-document.getElementById('total').textContent = t('totalSaved', total);
+document.getElementById('total').textContent = t('totalSaved', nTabs(total));
 
 async function save(scope) {
   const status = document.getElementById('status');
@@ -17,7 +17,7 @@ async function save(scope) {
   if (res?.error) status.textContent = res.error;
   else if (!res?.saved) status.textContent = t('nothingToSave');
   else {
-    status.textContent = t('savedCount', res.saved);
+    status.textContent = t('savedCount', nTabs(res.saved));
     if (!data.settings.closeAfterSave) setTimeout(() => window.close(), 900);
     return;
   }

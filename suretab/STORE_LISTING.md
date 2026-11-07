@@ -31,6 +31,7 @@ Coming from OneTab or Toby? Paste your OneTab export or drop your Toby JSON file
 
 🔒 PRIVATE BY DESIGN
 No account. No servers. No ads. No tracking. Your tabs stay in your browser.
+Open source: the full code is on GitHub → https://github.com/YOUR-USER/suretab
 
 Free. Feedback and feature requests are welcome — write a review or contact us.
 

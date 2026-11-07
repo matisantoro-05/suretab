@@ -151,3 +151,13 @@ await mirror([]);
 assert.equal((await readBackup()).length, back.length);
 
 console.log('All tests passed ✓');
+
+// ---- review prompt rules ----
+const { shouldAskReview } = await imp('lib/meta.js');
+const now = Date.now();
+assert.equal(shouldAskReview({ installedAt: now, saves: 10 }, now), false, 'too soon');
+assert.equal(shouldAskReview({ installedAt: now - 3 * 864e5, saves: 2 }, now), false, 'too few saves');
+assert.equal(shouldAskReview({ installedAt: now - 3 * 864e5, saves: 3 }, now), true);
+assert.equal(shouldAskReview({ installedAt: now, recoveries: 1 }, now), true, 'after a recovery');
+assert.equal(shouldAskReview({ installedAt: now - 9e9, saves: 9, reviewPrompt: 'dismissed' }, now), false, 'never twice');
+console.log('Review prompt tests passed ✓');

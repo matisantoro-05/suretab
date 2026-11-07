@@ -1,5 +1,12 @@
 import { KEY, load, addGroup, purgeOldTrash } from './lib/store.js';
 import { mirror } from './lib/bookmarks.js';
+import { getMeta, setMeta, bump } from './lib/meta.js';
+
+// Paste the link of your one-question Google Form here; leave empty to disable.
+const UNINSTALL_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeBQXyup85OrtcDGuAMw2NIAQ6nG5W13zPj4cKvmUucFCdk9Q/viewform';
+if (UNINSTALL_URL) {
+  chrome.runtime.setUninstallURL(`${UNINSTALL_URL}`).catch(() => {});
+}
 
 const MANAGER = chrome.runtime.getURL('manager.html');
 const LAZY = chrome.runtime.getURL('lazy.html');
@@ -17,6 +24,7 @@ const t = (k) => chrome.i18n.getMessage(k);
 
 // ---------- menus ----------
 chrome.runtime.onInstalled.addListener(async () => {
+  if (!(await getMeta()).installedAt) await setMeta({ installedAt: Date.now() });
   await chrome.contextMenus.removeAll();
   const contexts = ['action', 'page'];
   chrome.contextMenus.create({ id: 'save-tab', title: t('ctxSaveTab'), contexts });
@@ -77,6 +85,7 @@ async function saveTabs(scope, windowId, tabId) {
   // Check the write really landed before closing anything.
   const check = await load();
   if (!check.groups.some((g) => g.id === group.id)) throw new Error('Save failed; tabs were not closed.');
+  await bump('saves');
 
   if (settings.closeAfterSave) {
     await openManager(windowId ?? tabs[0].windowId);

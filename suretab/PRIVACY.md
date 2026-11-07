@@ -9,4 +9,4 @@ SureTab does not collect, transmit, sell or share any personal data.
 - **No servers:** SureTab has no backend, no account, no analytics and no advertising. It makes no network requests of its own. Favicons are shown through the browser's built-in favicon service.
 - **Your control:** you can export or delete your data at any time. Uninstalling the extension deletes its storage; the bookmark backup folder stays until you delete it.
 
-Contact: matisantoro03@gmail.com
+Contact: [your email]

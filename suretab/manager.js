@@ -1,7 +1,8 @@
 import * as store from './lib/store.js';
 import { parseImport } from './lib/parse.js';
 import { readBackup } from './lib/bookmarks.js';
-import { t, applyI18n, favicon, formatDate } from './lib/i18n.js';
+import { t, tabs as nTabs, groups as nGroups, applyI18n, favicon, formatDate } from './lib/i18n.js';
+import { getMeta, setMeta, bump, shouldAskReview } from './lib/meta.js';
 
 applyI18n();
 
@@ -14,7 +15,7 @@ function render() {
   const groupsEl = $('groups');
   groupsEl.textContent = '';
   const totalTabs = data.groups.reduce((n, g) => n + g.tabs.length, 0);
-  $('summary').textContent = t('summary', totalTabs, data.groups.length);
+  $('summary').textContent = t('summary', nTabs(totalTabs), nGroups(data.groups.length));
   $('empty').hidden = data.groups.length > 0;
 
   const q = query.toLowerCase();
@@ -38,7 +39,7 @@ function renderGroup(g, tabs) {
   const title = node.querySelector('.group-title');
   title.value = g.title;
   title.placeholder = t('untitled');
-  node.querySelector('.meta').textContent = `${t('tabsCount', g.tabs.length)} · ${formatDate(g.createdAt)}`;
+  node.querySelector('.meta').textContent = `${nTabs(g.tabs.length)} · ${formatDate(g.createdAt)}`;
 
   const list = node.querySelector('.links');
   for (const tab of tabs) {
@@ -170,7 +171,7 @@ $('btn-do-import').onclick = async () => {
   }
   const res = await store.importGroups(groups);
   $('dlg-import').close();
-  toast(t('importDone', res.tabs, res.groups));
+  toast(t('importDone', nTabs(res.tabs), nGroups(res.groups)));
 };
 
 // Export
@@ -210,7 +211,7 @@ function renderTrash() {
     const li = document.createElement('li');
     const span = document.createElement('span');
     const name = g.title || g.tabs[0]?.title || t('untitled');
-    span.textContent = `${name} — ${t('tabsCount', g.tabs.length)} · ${t('deletedOn', formatDate(g.deletedAt))}`;
+    span.textContent = `${name} — ${nTabs(g.tabs.length)} · ${t('deletedOn', formatDate(g.deletedAt))}`;
     const btn = document.createElement('button');
     btn.className = 'btn small';
     btn.textContent = t('restore');
@@ -248,7 +249,7 @@ async function renderSnapshots() {
   for (const s of snaps) {
     const li = document.createElement('li');
     const span = document.createElement('span');
-    span.textContent = `${formatDate(s.at)} — ${t('summary', s.tabs, s.groups)}`;
+    span.textContent = `${formatDate(s.at)} — ${t('summary', nTabs(s.tabs), nGroups(s.groups))}`;
     const btn = document.createElement('button');
     btn.className = 'btn small';
     btn.textContent = t('snapshotRestore');
@@ -272,12 +273,30 @@ async function checkRecovery() {
   const backup = await readBackup();
   if (!backup.length) return;
   const tabs = backup.reduce((n, g) => n + g.tabs.length, 0);
-  $('recover-body').textContent = t('recoverBody', tabs, backup.length);
+  $('recover-body').textContent = t('recoverBody', nTabs(tabs), nGroups(backup.length));
   $('recover').hidden = false;
   $('btn-recover').onclick = async () => {
     await store.importGroups(backup);
     $('recover').hidden = true;
     toast(t('recovered'));
+    await bump('recoveries');
+    checkReview();
+  };
+}
+
+// ---------- one-time review request ----------
+async function checkReview() {
+  const m = await getMeta();
+  if (!shouldAskReview(m) || !data.groups.length) return;
+  $('review').hidden = false;
+  $('btn-review-yes').onclick = async () => {
+    await setMeta({ reviewPrompt: 'done' });
+    $('review').hidden = true;
+    chrome.tabs.create({ url: `https://chromewebstore.google.com/detail/${chrome.runtime.id}/reviews` });
+  };
+  $('btn-review-no').onclick = async () => {
+    await setMeta({ reviewPrompt: 'dismissed' });
+    $('review').hidden = true;
   };
 }
 
@@ -296,4 +315,5 @@ chrome.storage.onChanged.addListener(async (changes, area) => {
 
 render();
 checkRecovery();
+checkReview();
 store.purgeOldTrash();

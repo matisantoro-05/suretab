@@ -1,4 +1,6 @@
 export const t = (key, ...subs) => chrome.i18n.getMessage(key, subs.map(String)) || key;
+export const tabs = (n) => (n === 1 ? t('tabsOne') : t('tabsCount', n));
+export const groups = (n) => (n === 1 ? t('groupsOne') : t('groupsCount', n));
 
 // Fills elements marked with data-i18n (text) and data-i18n-ph (placeholder).
 export function applyI18n(root = document) {
