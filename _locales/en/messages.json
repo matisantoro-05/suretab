@@ -1,0 +1,390 @@
+{
+  "extName": {
+    "message": "SureTab – Save Tabs, Never Lose Them"
+  },
+  "extDesc": {
+    "message": "Save all tabs in one click and never lose them. Automatic bookmark backup, trash, snapshots. Imports from OneTab & Toby."
+  },
+  "cmdSaveWindow": {
+    "message": "Save all tabs in this window"
+  },
+  "ctxSaveTab": {
+    "message": "Save this tab"
+  },
+  "ctxSaveWindow": {
+    "message": "Save all tabs in this window"
+  },
+  "ctxSaveAll": {
+    "message": "Save tabs from all windows"
+  },
+  "ctxOpen": {
+    "message": "Open my saved tabs"
+  },
+  "saveWindow": {
+    "message": "Save all tabs in this window"
+  },
+  "saveAll": {
+    "message": "Save tabs from all windows"
+  },
+  "saveTab": {
+    "message": "Save only this tab"
+  },
+  "openList": {
+    "message": "Open my saved tabs"
+  },
+  "totalSaved": {
+    "message": "$ARG1$ saved in total",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "nothingToSave": {
+    "message": "Nothing to save here."
+  },
+  "savedCount": {
+    "message": "Saved $ARG1$ ✓",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "summary": {
+    "message": "$ARG1$ in $ARG2$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "searchPlaceholder": {
+    "message": "Search saved tabs…"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "export": {
+    "message": "Export"
+  },
+  "trash": {
+    "message": "Trash"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "recoverTitle": {
+    "message": "We found a backup of your tabs"
+  },
+  "recoverBody": {
+    "message": "Your list is empty, but the bookmark backup has $ARG1$ in $ARG2$. Restore them?",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "recoverButton": {
+    "message": "Restore my tabs"
+  },
+  "recovered": {
+    "message": "Tabs restored ✓"
+  },
+  "emptyTitle": {
+    "message": "No saved tabs yet"
+  },
+  "emptyBody": {
+    "message": "Click the SureTab icon and choose “Save all tabs in this window”. Coming from OneTab or Toby? Use Import."
+  },
+  "undo": {
+    "message": "Undo"
+  },
+  "importTitle": {
+    "message": "Import tabs"
+  },
+  "importHelp": {
+    "message": "Paste your OneTab export (“Export URLs”), a Toby JSON export, a SureTab backup, or a plain list of links. Nothing is replaced: imported tabs are added."
+  },
+  "importFile": {
+    "message": "…or choose a file:"
+  },
+  "importButton": {
+    "message": "Import"
+  },
+  "importNone": {
+    "message": "No links found. Check the format and try again."
+  },
+  "importDone": {
+    "message": "Imported $ARG1$ in $ARG2$ ✓",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      },
+      "arg2": {
+        "content": "$2"
+      }
+    }
+  },
+  "cancel": {
+    "message": "Cancel"
+  },
+  "close": {
+    "message": "Close"
+  },
+  "exportHelp": {
+    "message": "Download a full backup file, or copy everything as text in OneTab's format."
+  },
+  "exportJson": {
+    "message": "Download backup (.json)"
+  },
+  "exportText": {
+    "message": "Copy as text"
+  },
+  "copied": {
+    "message": "Copied to clipboard ✓"
+  },
+  "trashHelp": {
+    "message": "Deleted groups and links stay here for 30 days."
+  },
+  "trashEmpty": {
+    "message": "The trash is empty."
+  },
+  "emptyTrash": {
+    "message": "Empty trash"
+  },
+  "confirmEmptyTrash": {
+    "message": "Delete everything in the trash forever?"
+  },
+  "deletedOn": {
+    "message": "deleted $ARG1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "restore": {
+    "message": "Restore"
+  },
+  "optCloseAfterSave": {
+    "message": "Close tabs after saving them"
+  },
+  "optSkipPinned": {
+    "message": "Don't save pinned tabs"
+  },
+  "optRestoreUnloaded": {
+    "message": "Restore tabs without loading them (saves memory)"
+  },
+  "optRemoveOnRestore": {
+    "message": "Remove tabs from the list when you open them"
+  },
+  "optBookmarkBackup": {
+    "message": "Automatic backup in bookmarks"
+  },
+  "bookmarkBackupHelp": {
+    "message": "SureTab keeps a copy of all your groups in the “SureTab backup” bookmarks folder. It survives browser updates and syncs with your Google account."
+  },
+  "snapshotsTitle": {
+    "message": "Automatic snapshots"
+  },
+  "snapshotsHelp": {
+    "message": "SureTab saves a snapshot of your list at most once an hour (last 5). Use one to go back in time."
+  },
+  "noSnapshots": {
+    "message": "No snapshots yet."
+  },
+  "snapshotRestore": {
+    "message": "Restore"
+  },
+  "confirmRestoreSnapshot": {
+    "message": "Replace your current list with this snapshot? (Your current list is kept as a new snapshot.)"
+  },
+  "restoreAll": {
+    "message": "Restore all"
+  },
+  "restoreNewWindow": {
+    "message": "In new window"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "star": {
+    "message": "Pin to top"
+  },
+  "unstar": {
+    "message": "Unpin"
+  },
+  "untitled": {
+    "message": "Untitled group"
+  },
+  "tabsCount": {
+    "message": "$ARG1$ tabs",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "tabsOne": {
+    "message": "1 tab"
+  },
+  "groupsCount": {
+    "message": "$ARG1$ groups",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "groupsOne": {
+    "message": "1 group"
+  },
+  "removeLink": {
+    "message": "Remove"
+  },
+  "linkRemoved": {
+    "message": "Link moved to trash"
+  },
+  "groupDeleted": {
+    "message": "Group moved to trash"
+  },
+  "reviewTitle": {
+    "message": "Is SureTab useful to you?"
+  },
+  "reviewBody": {
+    "message": "A short review helps other people find it. It takes 30 seconds."
+  },
+  "reviewYes": {
+    "message": "Leave a review"
+  },
+  "reviewNo": {
+    "message": "No, thanks"
+  },
+  "proPitch": {
+    "message": "Your tabs stay safe even if something happens to your computer."
+  },
+  "perkDrive": {
+    "message": "Automatic backup to your own Google Drive"
+  },
+  "perkVersions": {
+    "message": "A daily copy, kept for 30 days"
+  },
+  "perkMove": {
+    "message": "Move your tabs to another computer"
+  },
+  "perkOnce": {
+    "message": "One payment, yours forever. No subscription."
+  },
+  "buyPro": {
+    "message": "Get Pro – $ARG1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "haveKey": {
+    "message": "Already bought it?"
+  },
+  "licensePlaceholder": {
+    "message": "Paste your license key"
+  },
+  "activate": {
+    "message": "Activate"
+  },
+  "working": {
+    "message": "Working…"
+  },
+  "licenseInvalid": {
+    "message": "That key isn't valid. Check that you copied it completely."
+  },
+  "licenseLimit": {
+    "message": "This key is already active on 3 computers. Deactivate it on one of them first."
+  },
+  "licenseWrong": {
+    "message": "That key belongs to a different product."
+  },
+  "licenseNetwork": {
+    "message": "Couldn't connect. Check your internet connection and try again."
+  },
+  "permDenied": {
+    "message": "SureTab needs that permission to continue."
+  },
+  "proActive": {
+    "message": "✓ SureTab Pro is active on this computer. Thank you!"
+  },
+  "proActivated": {
+    "message": "SureTab Pro activated ✓"
+  },
+  "proRevoked": {
+    "message": "Your license is no longer valid (for example, after a refund)."
+  },
+  "confirmDeactivate": {
+    "message": "Deactivate SureTab Pro on this computer? You can activate it again later with your key."
+  },
+  "deactivatePro": {
+    "message": "Deactivate Pro on this computer"
+  },
+  "driveTitle": {
+    "message": "Google Drive backup"
+  },
+  "driveUnavailable": {
+    "message": "Google Drive backup will be available very soon."
+  },
+  "driveNotConnected": {
+    "message": "Not connected. The backup is saved in a “SureTab” folder in your Drive; SureTab can't see your other files."
+  },
+  "driveNever": {
+    "message": "Connected · no backup yet"
+  },
+  "driveLast": {
+    "message": "Connected · last backup: $ARG1$",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "driveReconnect": {
+    "message": "Google needs you to sign in again. Click “Connect Google Drive”."
+  },
+  "driveCancelled": {
+    "message": "Google sign-in was cancelled."
+  },
+  "driveError": {
+    "message": "The last backup failed ($ARG1$). SureTab will try again.",
+    "placeholders": {
+      "arg1": {
+        "content": "$1"
+      }
+    }
+  },
+  "driveConnect": {
+    "message": "Connect Google Drive"
+  },
+  "driveNow": {
+    "message": "Back up now"
+  },
+  "driveRestore": {
+    "message": "Restore from Drive"
+  },
+  "driveDisconnect": {
+    "message": "Disconnect"
+  },
+  "driveBackedUp": {
+    "message": "Backed up to Google Drive ✓"
+  },
+  "driveNoBackups": {
+    "message": "No backups in your Drive yet."
+  },
+  "groupRestored": {
+    "message": "Group opened and moved to trash"
+  }
+}
